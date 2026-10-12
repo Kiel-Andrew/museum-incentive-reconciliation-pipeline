@@ -55,3 +55,40 @@ RECONCILED GRAND TOTAL PAYOUT:             33,455.16 credits
 ============================================================
 Variance between vertical and horizontal math:          0.00
 ============================================================
+
+## Investigation Finding: Promotion Spike & Refund Surge
+
+### 1. Data Quantification
+* **Promotion:** During June 18–21, Garden Wing executed a discounted campaign (`MIDYEAR-CIRCLE`) offering Circle memberships at 225 credits (standard price: 300 credits).
+* **Sales Volume:** 76 desk sales were completed across 12 associates, generating 2,052.00 credits in gross commission (12% tier).
+* **Refund Spike:** Between June 24–28, 57 of the 76 memberships were refunded—a **75.0% refund rate**.
+* **Concentration:** Garden Wing alone represented **61.74% of all refunds** across the entire four-venue museum network (71 of 115 total refunds).
+
+### 2. Footfall Analysis
+Cross-referencing the Admissions sheet established that daily attendance during the period averaged **454 visitors/day** (versus the June monthly baseline of 461 visitors/day). This demonstrates that the surge and subsequent refund wave were not driven by macro visitor footfall or attendance swings.
+
+### 3. Financial & Compensation Impact
+The 57 cancellations clawed back **1,539.00 credits** from front-desk staff. By reducing net new sales, the cancellations pushed associates **A028** and **A031** below the 25-sale threshold, depriving each associate of their 75-credit monthly bonus.
+
+### 4. Plausible Causes & Recommended Audit
+* **Plausible Causes:**
+  1. *Exploitation / Multiple Accounts:* Single individuals or coordinated buyers exploiting front-desk admissions privileges and subsequently canceling memberships en masse.
+  2. *Misleading Promotion / Buyer Remorse:* Front-desk staff aggressively selling the tier without communicating restrictions, resulting in buyer remorse once terms were reviewed off-site.
+* **Distinguishing Audit Test:** Inspect payment method tokens, customer billing details, and support dispute reason codes. Clustered payment tokens confirm repeat gaming, whereas unique external accounts coupled with complaint logs confirm promotional misrepresentation.
+
+---
+
+## Refresh & Repeatability Instructions
+
+The calculation pipeline is designed to be fully repeatable for subsequent months without manual row-by-row intervention:
+
+1. **Ingest New Data:** 
+   * Paste the new month's transaction and admissions records into their respective raw sheets (`Raw_Transactions` and `Raw_Admissions`), or replace the source table
+2. **Execute Automated Refresh:** 
+   * Navigate to the **Data** tab on the Excel ribbon.
+   * Click **Refresh All** (or press `Ctrl + Alt + F5`).
+3. **Automated Pipeline Processing:**
+   * **Duplicate Key Isolation:** Power Query flags and routes all duplicated `transaction_id` rows directly to the `Exceptions` sheet.
+   * **Relational Validation:** Refund records are joined to original sales; mismatched products, inconsistent credit amounts, or non-completed sales are isolated into the `Exceptions` register.
+   * **Clawback Reversal:** Valid refund reversals are dynamically credited against the original selling associate's account rather than the processing associate.
+   * **Payout & Bonus Calculation:** Net eligible new desk sales are recalculated, bonus eligibility ($\ge 25$ net new sales) is evaluated, and the final payout schedule in `Payout_Summary` updates automatically.
