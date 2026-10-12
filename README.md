@@ -55,6 +55,7 @@ RECONCILED GRAND TOTAL PAYOUT:             33,455.16 credits
 ============================================================
 Variance between vertical and horizontal math:          0.00
 ============================================================
+```
 
 ## Investigation Finding: Promotion Spike & Refund Surge
 
